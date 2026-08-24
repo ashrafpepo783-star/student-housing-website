@@ -1,0 +1,11 @@
+async function api(url,opt={}){const r=await fetch(url,opt);const d=await r.json();if(!r.ok)throw Error(d.error||"Error");return d}
+async function check(){const m=await api("/api/me");if(!m.user||m.user.role!=="admin")location.href="/";load()}
+document.querySelector("#aptForm").onsubmit=async e=>{e.preventDefault();try{await api("/api/admin/apartments",{method:"POST",body:new FormData(e.target)});alert("تمت إضافة الإعلان");e.target.reset();load()}catch(x){alert(x.message)}}
+async function load(){
+ const r=await api("/api/admin/reports");document.querySelector("#stats").innerHTML=[["الحجوزات المؤكدة",r.total_bookings],["الإيجارات",r.rents],["التأمينات",r.deposits],["العمولات 25%",r.commissions],["إجمالي المدفوع",r.totals]].map(x=>`<div class="stat"><b>${x[0]}</b><h2>${x[1]} جنيه</h2></div>`).join("");
+ const a=await api("/api/apartments");document.querySelector("#apartments").innerHTML=a.map(x=>`<div class="card"><h3>${x.title}</h3><p>${x.area}</p><button class="danger" onclick="delA(${x.id})">حذف</button></div>`).join("");
+ const b=await api("/api/admin/bookings");document.querySelector("#bookings").innerHTML=b.map(x=>`<div class="card"><h3>#${x.id} - ${x.apartment_title}</h3><p>الطالب: ${x.student_name} | ${x.phone}</p><p>السرير: ${x.bed_type} | الإجمالي: ${x.total} جنيه | العمولة: ${x.commission} جنيه</p><p>الحالة: ${x.status}</p><button class="success" onclick="status(${x.id},'confirmed')">تأكيد</button> <button class="danger" onclick="status(${x.id},'rejected')">رفض</button><p><a href="/uploads/${x.receipt}" target="_blank">عرض إيصال التحويل</a></p></div>`).join("");
+}
+async function status(id,s){try{await api("/api/admin/bookings/"+id+"/status",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({status:s})});load()}catch(e){alert(e.message)}}
+async function delA(id){if(confirm("حذف الإعلان؟")){await api("/api/admin/apartments/"+id,{method:"DELETE"});load()}}
+async function logout(){await api("/api/logout",{method:"POST"});location.href="/"} check();

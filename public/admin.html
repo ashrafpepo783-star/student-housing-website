@@ -1,0 +1,17 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>لوحة الإدارة</title><link rel="stylesheet" href="style.css"></head>
+<body><header><h1>لوحة إدارة السكن</h1><nav><a href="/">الموقع</a><button onclick="logout()">خروج</button></nav></header>
+<main>
+<section class="stats" id="stats"></section>
+<section class="panel"><h2>إضافة شقة</h2>
+<form id="aptForm" enctype="multipart/form-data">
+<input name="title" placeholder="اسم/عنوان الإعلان" required><input name="area" placeholder="المنطقة" required><input name="address" placeholder="العنوان التفصيلي">
+<textarea name="description" placeholder="وصف الشقة"></textarea>
+<label>Single - السعر / عدد الأسرّة</label><input name="single_price" type="number" min="0"><input name="single_beds" type="number" min="0">
+<label>Double - السعر / عدد الأسرّة</label><input name="double_price" type="number" min="0"><input name="double_beds" type="number" min="0">
+<label>Triple - السعر / عدد الأسرّة</label><input name="triple_price" type="number" min="0"><input name="triple_beds" type="number" min="0">
+<label>صور الشقة (حتى 6)</label><input name="images" type="file" accept="image/*" multiple>
+<label>فيديو</label><input name="video" type="file" accept="video/*">
+<button>إضافة الإعلان</button></form></section>
+<section class="panel"><h2>الإعلانات</h2><div id="apartments"></div></section>
+<section class="panel"><h2>الحجوزات</h2><div id="bookings"></div></section>
+</main><script src="admin.js"></script></body></html>

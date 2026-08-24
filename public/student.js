@@ -1,0 +1,3 @@
+async function api(url,opt={}){const r=await fetch(url,opt);const d=await r.json();if(!r.ok)throw Error(d.error||"Error");return d}
+async function load(){const m=await api("/api/me");if(!m.user)return location.href="/";document.querySelector("#welcome").textContent=`أهلاً ${m.user.name}`;const b=await api("/api/my-bookings");document.querySelector("#bookings").innerHTML=b.map(x=>`<div class="card"><h3>${x.apartment_title}</h3><p>السرير: ${x.bed_type}</p><p>الإيجار: ${x.monthly_rent} جنيه</p><p>التأمين: ${x.deposit} جنيه</p><p>العمولة: ${x.commission} جنيه</p><p>الإجمالي: ${x.total} جنيه</p><p>الحالة: <b>${x.status}</b></p></div>`).join("")||"<p>لا توجد حجوزات.</p>"}
+async function logout(){await api("/api/logout",{method:"POST"});location.href="/"} load();
